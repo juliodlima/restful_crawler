@@ -16,6 +16,7 @@
     * passar a key no Headers "http-x-api-key" : "senhaCrawler"
     * passar a key no Headers "Content-Type" : "application/json"
     * passar os campos abaixo no Body
+    * OBS: pode ser passado outro tipo de busca como, tipo_veiculo=moto, ou marca=honda, etc.
 
 # Instruções para uso
 
@@ -42,6 +43,7 @@
     * passar a key no Headers "http-x-api-key" : "senhaCrawler"
     * passar a key no Headers "Content-Type" : "application/json"
     * passar os campos abaixo no Body
+    * OBS: o link abaixo são os mesmos que foram retornado na Busca da Api anterior
 
 # Detalhes:
 ```Json
