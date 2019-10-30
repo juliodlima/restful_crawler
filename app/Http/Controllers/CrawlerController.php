@@ -58,10 +58,13 @@ class CrawlerController extends Controller
                         $end .= "origem-particular/";
                     }
                 }
+
                 $end = substr($end, 0, -1);
+
                 $this->lista = [
                     "endereco" => $end
                 ];
+
                 $crawler = Goutte::request('GET', $end);
 
                 $crawler->filter('body main > section.resultados-busca div.container div.veiculos-destaque div div.list-of-cards div.card-nitro-home')->each(function($node, $i) {
@@ -110,6 +113,7 @@ class CrawlerController extends Controller
                 if (!is_null($request->input('link'))) {
                     $end = $request->input('link');
                 }
+
                 $detalhe = [];
                 $crawler = Goutte::request('GET', $end);
                 $node = $crawler->filter('div.item-info');
@@ -150,6 +154,7 @@ class CrawlerController extends Controller
                     "response"  => $detalhe,
                     "n"         => 200
                 ];
+                
             } catch (\Exception $e) {
                 $response = [
                     "response"  => $e->message,
