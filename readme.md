@@ -1,4 +1,5 @@
 # Projeto Api Crawler
+
 # Instruções para instalação
 
 * git clone https://github.com/juliodlima/restful_crawler.git
@@ -9,6 +10,9 @@
 
 * configurar APP_KEY=senhaCrawler no .env
 
+
+# Instruções para uso
+
 # Usar programa Postman para teste da busca:
 
     * metodo : "POST"
@@ -17,8 +21,6 @@
     * passar a key no Headers "Content-Type" : "application/json"
     * passar os campos abaixo no Body
     * OBS: pode ser passado outro tipo de busca como, tipo_veiculo=moto, ou marca=honda, etc.
-
-# Instruções para uso
 
 # Busca:
 ```Json

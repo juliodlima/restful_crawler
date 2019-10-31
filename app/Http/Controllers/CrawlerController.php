@@ -8,10 +8,10 @@ use Goutte;
 
 class CrawlerController extends Controller
 {
-    public $lista = [];
+    public $list = [];
     public $acessorios = [];
     public $aux = [];
-    public $thumbs = [];
+    public $galeria = [];
 
     public function busca(Request $request)
     {   
@@ -61,7 +61,7 @@ class CrawlerController extends Controller
 
                 $end = substr($end, 0, -1);
 
-                $this->lista = [
+                $this->list = [
                     "endereco" => $end
                 ];
 
@@ -71,29 +71,32 @@ class CrawlerController extends Controller
                     $this->acessorios = [];
                     $link = $node->filter('div.card-content a')->attr('href');
                     $link = explode("/", $link);
-                    $this->lista[$i]["link"] = "https://seminovos.com.br/" . $link[1];
-                    $this->lista[$i]["img"] = $node->filter('figure a img')->attr('src');
-                    $this->lista[$i]["marca_modelo"] = $node->filter('div.card-content a h2.card-title')->text();
-                    $this->lista[$i]["preco"] = $node->filter('div.card-content a span.card-price')->text();
-                    $this->lista[$i]["versao"] = substr($node->filter('div.card-content div.card-info div.card-features p.card-subtitle span')->text(),7,-1);
-                    $this->lista[$i]["ano"] = trim($node->filter("div.card-content div.card-info div.card-features ul.list-features li[title='Ano de fabricação']")->text());
-                    $this->lista[$i]["km"] = trim($node->filter("div.card-content div.card-info div.card-features ul.list-features li[title='Kilometragem atual']")->text());
-                    $this->lista[$i]["cambio"] = trim($node->filter("div.card-content div.card-info div.card-features ul.list-features li[title='Tipo de câmbio']")->text());
+
+                    $this->list[$i]["link"] = "https://seminovos.com.br/" . $link[1];
+                    $this->list[$i]["img"] = $node->filter('figure a img')->attr('src');
+                    $this->list[$i]["marca_modelo"] = $node->filter('div.card-content a h2.card-title')->text();
+                    $this->list[$i]["preco"] = $node->filter('div.card-content a span.card-price')->text();
+                    $this->list[$i]["versao"] = substr($node->filter('div.card-content div.card-info div.card-features p.card-subtitle span')->text(),7,-1);
+                    $this->list[$i]["ano"] = trim($node->filter("div.card-content div.card-info div.card-features ul.list-features li[title='Ano de fabricação']")->text());
+                    $this->list[$i]["km"] = trim($node->filter("div.card-content div.card-info div.card-features ul.list-features li[title='Kilometragem atual']")->text());
+                    $this->list[$i]["cambio"] = trim($node->filter("div.card-content div.card-info div.card-features ul.list-features li[title='Tipo de câmbio']")->text());
 
                     $listaAcessorios = $node->filter('div.card-content div.card-info div.card-features ul.list-inline li span')->each(function($itens) {
                         $this->acessorios[] = substr(trim($itens->text()),0,-1);
                     });
-                    $this->lista[$i]["acessorios"] = $this->acessorios;
-                    $this->lista[$i]["tipo_venda"] = trim($node->filter('div.card-content div.card-info div.card-features p.card-owner-label')->text());
+                    $this->list[$i]["acessorios"] = $this->acessorios;
+                    $this->list[$i]["tipo_venda"] = trim($node->filter('div.card-content div.card-info div.card-features p.card-owner-label')->text());
                 });
+
                 $response = [
-                    "response"  => $this->lista,
+                    "response"  => $this->list,
                     "n"         => 200
                 ];
+
             } catch (\Exception $e) {
                 $response = [
                     "response"  => $e->message,
-                    "n"         => 409
+                    "n"         => 400
                 ];
             }
         } else {
@@ -133,19 +136,18 @@ class CrawlerController extends Controller
 
                 $detalhe["Foto"] = $crawler->filter("#fotoVeiculo img")->attr("src");
 
-                $this->thumbs = [];
+                $this->galeria = [];
                 $crawler->filter('div.gallery-thumbs ul li')->each(function($mini) {
                     if ($mini->filter("img")->attr("class") == "available") {
-                        $this->thumbs[] = $mini->filter("img")->attr("data-src");
+                        $this->galeria[] = $mini->filter("img")->attr("data-src");
                     }
                 });
-                $detalhe["Thumbs"] = $this->thumbs;
+                $detalhe["Galeria"] = $this->galeria;
 
                 $this->acessorios = [];
                 $crawler->filter('div.full-features ul li')->each(function($mini) {
                     $this->acessorios[] = $mini->filter("span")->text();
                 });
-                
                 $detalhe["Acessórios"] = $this->acessorios;
 
                 $detalhe["Observações"] = $crawler->filter('div.full-content p')->text();
@@ -158,7 +160,7 @@ class CrawlerController extends Controller
             } catch (\Exception $e) {
                 $response = [
                     "response"  => $e->message,
-                    "n"         => 409
+                    "n"         => 400
                 ];
             }
         } else {

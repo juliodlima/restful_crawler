@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 
 // teste da Api
 Route::middleware('api')->get('/', function () {
-    return response()->json(['message' => 'API Card', 'status' => 'Connected']);
+    return response()->json(['message' => 'API Crawler', 'status' => 'Connected']);
 });
 
 // **************** Crawler *********************************************
